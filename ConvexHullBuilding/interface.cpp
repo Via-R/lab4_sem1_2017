@@ -98,8 +98,6 @@ void display() {
 	drawPoints();
 	drawEdges();
 	glPointSize(18.0);
-	drawPoint(0, 0);
-
 
 	glutSwapBuffers();
 	
