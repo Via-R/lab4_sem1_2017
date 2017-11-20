@@ -49,29 +49,6 @@ void drawLine(float x1, float y1, float x2, float y2) {
 	glEnd();
 }
 
-
-//void drawSites() {
-//	setPointsColor(54, 38, 167);
-//	for (auto i = initSites.cbegin(); i != initSites.cend(); ++i) {
-//		drawPoint(i->x, i->y);
-//	}
-//}
-//
-//void drawResPoints() {
-//	setPointsColor(255, 51, 31);
-//	for (auto i = resPoints.cbegin(); i != resPoints.cend(); ++i) {
-//		drawPoint(i->x, i->y);
-//	}
-//}
-//
-//void drawEdges() {
-//	setLinesColor(27, 153, 139);
-//	for (auto i = resEdges.cbegin(); i != resEdges.cend(); ++i) {
-//		if ((*i)->next != nullptr)
-//			drawLine((*i)->x, (*i)->y, (*i)->next->x, (*i)->next->y);
-//	}
-//}
-
 void drawPoints() {
 	for (auto i = initPoints.cbegin(); i != initPoints.cend(); ++i) {
 		drawPoint(i->x, i->y);
@@ -126,14 +103,14 @@ void reshape(GLsizei width, GLsizei height) {  // GLsizei for non-negative integ
 
 void keyboard(unsigned char key, int x, int y) {
 	switch (key) {
-	case 27:     // ESC key
+	case 27:
 		exit(0);
 		break;
 	}
 }
 
 
-void startPresentation() {
+void startPresentation(unsigned int choice) {
 	ifstream myfile("input.txt");
 	string line;
 	if (myfile.is_open()) {
@@ -147,19 +124,20 @@ void startPresentation() {
 			customSet(x, y);
 		}
 
-		resEdges = getResEdges();
+		Builder *obj;
+		if (choice == 0)
+			obj = new GrahamHull;
+		else
+			obj = new GrahamHull;
 
-		//glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);//glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA); /*¬ключаем двойную буферизацию и четырехкомпонентный цвет*/
+		resEdges = obj->getResEdges();
 
 		glutInitWindowPosition(200, 50);
 		glutInitWindowSize(800, 600);
-		glutCreateWindow("Voronoi diagram");
-		//glutFullScreen();
+		glutCreateWindow("Convex hull biulding");
 		glutReshapeFunc(reshape);
 		glutDisplayFunc(display);
 		glutKeyboardFunc(keyboard);
-
-		//glutIdleFunc()
 
 		glutMainLoop();
 	}

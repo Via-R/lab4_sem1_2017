@@ -6,38 +6,13 @@
 #define M_PI           3.14159265358979323846
 
 using namespace std;
-using namespace placeholders;
 
 vector<Point> init;
 vector<EdgeVertex> edges;
-vector<Vect> vectors;
 
-Point leftDot;
+Point GrahamHull::leftDot = Point();
 
-float getAngle(float x, float y) {
-	float result = acos((x - leftDot.x) / (sqrt((x - leftDot.x)*(x - leftDot.x) + (y - leftDot.y)*(y - leftDot.y))));
-	return y - leftDot.y < 0 ? -result : result;
-};
-
-struct compareVertexes {
-	bool operator() (Point i, Point j) { return (getAngle(i.x, i.y) < getAngle(j.x, j.y)); }
-} compareObj;
-
-struct compareForMin {
-	bool operator() (Point i, Point j) { return (i.x < j.x); }
-} compareMin;
-
-void customSet(float x, float y) {
-	init.push_back(Point(x, y));
-}
-
-void printCos() {
-	for (auto i = init.cbegin(); i != init.cend(); ++i) {
-		cout << getAngle(i->x, i->y) << endl;
-	}
-}
-
-void printDots(){
+void printDots() {
 	cout << "\n\n>----- Printing dots ------<\n";
 	for (auto i = init.cbegin(); i != init.cend(); ++i) {
 		cout << i->x << " " << i->y << endl;
@@ -45,7 +20,35 @@ void printDots(){
 	cout << ">---------- End -----------<\n";
 }
 
-void setVectors() {
+void customSet(float x, float y) {
+	init.push_back(Point(x, y));
+}
+
+
+
+
+
+
+float GrahamHull::getAngle(float x, float y) {
+	float result = acos((x - GrahamHull::leftDot.x) / (sqrt((x - GrahamHull::leftDot.x)*(x - GrahamHull::leftDot.x) + (y - GrahamHull::leftDot.y)*(y - GrahamHull::leftDot.y))));
+	return y - GrahamHull::leftDot.y < 0 ? -result : result;
+};
+
+void GrahamHull::printCos() {
+	for (auto i = init.cbegin(); i != init.cend(); ++i) {
+		cout << getAngle(i->x, i->y) << endl;
+	}
+}
+
+void GrahamHull::printVectors() {
+	cout << "\n\n>----- Printing vectors ------<\n";
+	for (auto i = vectors.cbegin(); i != vectors.cend(); ++i) {
+		cout << i->x << " " << i->y << endl;
+	}
+	cout << ">---------- End -----------<\n";
+}
+
+void GrahamHull::setVectors() {
 	float px = init.cbegin()->x, py = init.cbegin()->y;
 	for (auto i = init.cbegin() + 1; i != init.cend(); ++i) {
 		vectors.push_back(Vect(i->x - px, i->y - py));
@@ -54,7 +57,7 @@ void setVectors() {
 	}
 }
 
-bool isConvergent(float x1, float y1, float x2, float y2) {
+bool GrahamHull::isConvergent(float x1, float y1, float x2, float y2) {
 	float l1 = sqrt(x1*x1 + y1*y1);
 	float l2 = sqrt(x2*x2 + y2*y2);
 	float asinBetween = asin((x1*y2 - y1*x2) / (l1*l2));
@@ -67,20 +70,13 @@ bool isConvergent(float x1, float y1, float x2, float y2) {
 	return true;
 };
 
-void printVectors() {
-	cout << "\n\n>----- Printing vectors ------<\n";
-	for (auto i = vectors.cbegin(); i != vectors.cend(); ++i) {
-		cout << i->x << " " << i->y << endl;
-	}
-	cout << ">---------- End -----------<\n";
-}
 
-vector<EdgeVertex> getResEdges() {
+vector<EdgeVertex> GrahamHull::getResEdges() {
 	printDots();
 	auto mainEl = min_element(init.begin(), init.end(), compareMin);
 	Point mainDot(mainEl->x, mainEl->y);
-	leftDot = mainDot;
-	init.erase(mainEl);	
+	GrahamHull::leftDot = mainDot;
+	init.erase(mainEl);
 	sort(init.begin(), init.end(), compareObj);
 	cout << "\n---------------------------------------------------------------\n\n";
 	printCos();
@@ -134,3 +130,11 @@ vector<EdgeVertex> getResEdges() {
 	}
 	return edges;
 };
+
+
+
+
+
+
+
+
