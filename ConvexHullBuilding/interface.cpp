@@ -77,8 +77,8 @@ void display() {
 	drawPoints();
 	glPointSize(18.0);
 
-	/*setPointsColor(23, 234, 93);
-	drawPoint(0, 0);*/
+	setPointsColor(23, 234, 93);
+	drawPoint(0, 0);
 
 	glutSwapBuffers();
 	
@@ -131,6 +131,8 @@ void startPresentation(unsigned int choice) {
 		Builder *obj;
 		if(choice == 1)
 			obj = new JarvisHull;
+		else if(choice == 2)
+			obj = new KirkpatrickHull;
 		else
 			obj = new GrahamHull;
 

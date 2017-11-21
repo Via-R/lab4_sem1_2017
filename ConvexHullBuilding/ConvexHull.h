@@ -52,10 +52,7 @@ private:
 
 class JarvisHull : public Builder {
 public:
-	static float getAngle(float x, float y);
-	
 	std::vector<EdgeVertex> getResEdges();
-
 
 private:
 	struct compareForMin {
@@ -66,4 +63,27 @@ private:
 
 	static Point mainDot;
 };
-//std::vector<EdgeVertex> getResEdges();
+
+class KirkpatrickHull : public Builder {
+public:
+	std::vector<EdgeVertex> getResEdges();
+
+private:
+	struct compareSort {
+		bool operator() (Point i, Point j) {
+			if (i.y == j.y)
+				return (i.x < j.x);
+			return (i.y < j.y);
+		}
+	} compareObj;
+
+	bool isConvergent(float, float, float, float);
+	void setVectors();
+
+	std::vector<Point> leftPart;
+	std::vector<Point> rightPart;
+	std::vector<Vect> leftVectors;
+	std::vector<Vect> rightVectors;
+
+	void printSides();
+};

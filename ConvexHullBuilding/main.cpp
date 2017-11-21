@@ -7,6 +7,6 @@ using namespace std;
 
 void main(int argc, char * argv[]) {
 	glutInit(&argc, argv);
-	startPresentation(0);
+	startPresentation(2);
 	system("pause");
 }
