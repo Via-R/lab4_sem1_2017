@@ -25,8 +25,14 @@ class Builder {
 public:
 	virtual std::vector<EdgeVertex> getResEdges() = 0;
 };
+
 class GrahamHull : public Builder{
 public:
+	
+	std::vector<EdgeVertex> getResEdges();
+
+
+private:
 	struct compareVertexes {
 		bool operator() (Point i, Point j) { return (getAngle(i.x, i.y) < getAngle(j.x, j.y)); }
 	} compareObj;
@@ -40,11 +46,24 @@ public:
 	void printVectors();
 	void setVectors();
 	bool isConvergent(float x1, float y1, float x2, float y2);
+	std::vector<Vect> vectors;
+	static Point leftDot;
+};
+
+class JarvisHull : public Builder {
+public:
+	static float getAngle(float x, float y);
+	
 	std::vector<EdgeVertex> getResEdges();
 
 
 private:
-	std::vector<Vect> vectors;
-	static Point leftDot;
+	struct compareForMin {
+		bool operator() (Point i, Point j) { return (i.y < j.y); }
+	} compareMin;
+
+	float getPolarAngle(float, float, float, float);
+
+	static Point mainDot;
 };
 //std::vector<EdgeVertex> getResEdges();

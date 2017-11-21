@@ -56,7 +56,6 @@ void drawPoints() {
 }
 
 void drawEdges() {
-	setLinesColor(0, 0, 0);
 	for (auto i = resEdges.cbegin(); i != resEdges.cend(); ++i) {
 		drawLine(i->x, i->y, i->next->x, i->next->y);
 	}
@@ -64,17 +63,22 @@ void drawEdges() {
 
 
 void display() {
-	setBackColor(251, 251, 255);
-
+	//setBackColor(251, 251, 255);
+	setBackColor(237, 237, 244);
+	
 	glClear(GL_COLOR_BUFFER_BIT);
 	glPointSize(8.0);
 	glLineWidth(5.0);
 	glEnable(GL_POINT_SMOOTH);
 	
+	setLinesColor(87, 136, 108);
 	setPointsColor(234, 23, 93);
-	drawPoints();
 	drawEdges();
+	drawPoints();
 	glPointSize(18.0);
+
+	/*setPointsColor(23, 234, 93);
+	drawPoint(0, 0);*/
 
 	glutSwapBuffers();
 	
@@ -125,8 +129,8 @@ void startPresentation(unsigned int choice) {
 		}
 
 		Builder *obj;
-		if (choice == 0)
-			obj = new GrahamHull;
+		if(choice == 1)
+			obj = new JarvisHull;
 		else
 			obj = new GrahamHull;
 
@@ -134,7 +138,7 @@ void startPresentation(unsigned int choice) {
 
 		glutInitWindowPosition(200, 50);
 		glutInitWindowSize(800, 600);
-		glutCreateWindow("Convex hull biulding");
+		glutCreateWindow("Convex hull building");
 		glutReshapeFunc(reshape);
 		glutDisplayFunc(display);
 		glutKeyboardFunc(keyboard);

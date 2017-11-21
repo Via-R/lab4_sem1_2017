@@ -11,6 +11,7 @@ vector<Point> init;
 vector<EdgeVertex> edges;
 
 Point GrahamHull::leftDot = Point();
+Point JarvisHull::mainDot = Point();
 
 void printDots() {
 	cout << "\n\n>----- Printing dots ------<\n";
@@ -23,10 +24,6 @@ void printDots() {
 void customSet(float x, float y) {
 	init.push_back(Point(x, y));
 }
-
-
-
-
 
 
 float GrahamHull::getAngle(float x, float y) {
@@ -69,7 +66,6 @@ bool GrahamHull::isConvergent(float x1, float y1, float x2, float y2) {
 		return false;
 	return true;
 };
-
 
 vector<EdgeVertex> GrahamHull::getResEdges() {
 	printDots();
@@ -132,9 +128,70 @@ vector<EdgeVertex> GrahamHull::getResEdges() {
 };
 
 
+/*--------------------------------------------------------------------------------------------*/
+
+float JarvisHull::getPolarAngle(float x1, float y1, float x2, float y2) {
+	float l1 = sqrt(x1*x1 + y1*y1);
+	float l2 = sqrt(x2*x2 + y2*y2);
+	return acos((x1*x2+y1*y2)/(l1*l2));
+};
 
 
+vector<EdgeVertex> JarvisHull::getResEdges() {
+	printDots();
+	if (init.size() < 3) {
+		cout << "Insufficient quantity of initial vertexes, try again\n";
+		return edges;
+	}
+	auto mainEl = min_element(init.begin(), init.end(), compareMin);
+	mainDot.x = mainEl->x;
+	mainDot.y = mainEl->y;
+	init.erase(mainEl);
+	init.insert(init.begin(), mainDot);
+	init.push_back(mainDot);
+	auto next = init.begin() + 1;
+	auto b = init.begin() + 1;
+	cout << mainDot.x << " " << mainDot.y << endl;
 
-
-
-
+	float minInitAngle = M_PI;
+	for (auto i = init.begin() + 1; i != init.end() - 1; ++i) {
+		if (getPolarAngle(1, 0, i->x - mainDot.x, i->y - mainDot.y) < minInitAngle) {
+			minInitAngle = getPolarAngle(1, 0, i->x, i->y);
+			next = i;
+		}
+	}
+	Point temp(next->x, next->y);
+	init.erase(next);
+	init.insert(init.begin() + 1, temp);
+	b = init.begin() + 1;
+	printDots();
+	while (b->x != mainDot.x || b->y != mainDot.y) {
+		auto c = b - 1;
+		float px, py;
+		px = b->x - c->x;
+		py = b->y - c->y;
+		float minAngle = M_PI;
+		for (auto i = b; i != init.end(); ++i) {
+			if (getPolarAngle(px, py, i->x - b->x, i->y - b->y) < minAngle) {
+				minAngle = getPolarAngle(px, py, i->x - b->x, i->y - b->y);
+				next = i;
+			}
+		}
+		Point temp(next->x, next->y);
+		init.erase(next);
+		init.insert(b + 1, temp);
+		++b;
+	}
+	auto prev = init.cbegin();
+	auto prevIt = init.cbegin();
+	for (auto j = init.cbegin() + 1; j != b + 1; ++j) {
+		EdgeVertex * second = new EdgeVertex(j->x, j->y);
+		EdgeVertex first(second);
+		first.x = prevIt->x;
+		first.y = prevIt->y;
+		++prevIt;
+		edges.push_back(first);
+	}
+	printDots();
+	return edges;
+};
