@@ -1,5 +1,8 @@
 # Convex hull building
-This labwork implements the process of building the convex hull on a set of predefined points
+
+![Screenshot of the resulting diagram window](screen.png)
+
+This labwork implements the process of building the convex hull on a set of predefined points.
 ## How to test
 In order to test the labwork, you need MS Visual Studio C++ installed, then clone the repository using
 
